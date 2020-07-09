@@ -1,7 +1,0 @@
-.DS_Store
-Thumbs.db
-
-*.json
-gulpfile.js
-src/**/*.*
-node_modules/
