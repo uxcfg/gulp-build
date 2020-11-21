@@ -19,6 +19,7 @@ const spriteSvg = require("gulp-svg-sprite");
 const notify = require("gulp-notify");
 const webpack = require("webpack");
 const webpackStream = require("webpack-stream");
+const formatHtml = require("gulp-format-html");
 
 /* Paths */
 var path = {
@@ -46,6 +47,7 @@ var path = {
 
 function svgSprite() {
 	return src("src/img/**/*.svg")
+		.pipe(imagemin())
 		.pipe(
 			spriteSvg({
 				mode: {
@@ -83,6 +85,7 @@ function html() {
 				basepath: "@file",
 			})
 		)
+		.pipe(formatHtml())
 		.pipe(dest(path.build.html))
 		.pipe(browsersync.stream());
 }
@@ -165,7 +168,10 @@ function watchFiles() {
 	gulp.watch([path.watch.svgImg], gulp.series(svgSprite, reload));
 }
 
-const build = gulp.series(clean, gulp.parallel(html, css, js, images, svgSprite));
+const build = gulp.series(
+	clean,
+	gulp.parallel(html, css, js, images, svgSprite)
+);
 const watch = gulp.parallel(build, watchFiles, browserSync);
 
 /* Exports Tasks */
